@@ -1,6 +1,7 @@
 package com.joaovitor.controller;
 
 import com.joaovitor.domain.transacoes.TransacaoDTO;
+import com.joaovitor.domain.transacoes.TransacaoRetorno;
 import com.joaovitor.services.TransacoesService;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -21,7 +22,7 @@ public class TransacoesController {
     @POST
     @Transactional
     public Response insertTransacoes(@PathParam("id") Integer id, TransacaoDTO transacao){
-        service.insertTransacoes(transacao, id);
-        return Response.ok().build();
+        TransacaoRetorno retorno = service.insertTransacoes(transacao, id);
+        return Response.ok(retorno).build();
     }
 }

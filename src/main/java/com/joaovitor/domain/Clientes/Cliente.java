@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 public class Cliente {
     @Id
     private Long id;
-    private long limite;
-    private long saldoInicial;
+    private int limite;
+    private int saldoInicial;
 
     public Cliente(){
 
@@ -22,11 +22,11 @@ public class Cliente {
         this.id = id;
     }
 
-    public long getLimite() {
+    public int getLimite() {
         return limite;
     }
 
-    public void setLimite(long limite) {
+    public void setLimite(int limite) {
         this.limite = limite;
     }
 
@@ -34,7 +34,7 @@ public class Cliente {
         return saldoInicial;
     }
 
-    public void setSaldoInicial(long saldoInicial) {
+    public void setSaldoInicial(int saldoInicial) {
         this.saldoInicial = saldoInicial;
     }
 }

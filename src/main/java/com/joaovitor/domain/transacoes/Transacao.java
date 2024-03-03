@@ -1,9 +1,6 @@
 package com.joaovitor.domain.transacoes;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -74,7 +71,7 @@ public class Transacao {
         this.realizada_em = realizada_em;
     }
 
-    public long getIdCliente() {
+    public int getIdCliente() {
         return idCliente;
     }
 
