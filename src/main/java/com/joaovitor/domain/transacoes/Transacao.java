@@ -1,5 +1,6 @@
 package com.joaovitor.domain.transacoes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class Transacao {
         this.realizada_em = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
         this.idCliente = idCliente;
     }
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -70,7 +72,7 @@ public class Transacao {
     public void setRealizada_em(Date realizada_em) {
         this.realizada_em = realizada_em;
     }
-
+    @JsonIgnore
     public int getIdCliente() {
         return idCliente;
     }

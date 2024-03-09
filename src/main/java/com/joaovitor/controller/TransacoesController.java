@@ -25,4 +25,6 @@ public class TransacoesController {
         TransacaoRetorno retorno = service.insertTransacoes(transacao, id);
         return Response.ok(retorno).build();
     }
+
+    //TODO: Os retornos caso seja usado Debito ou Credito
 }

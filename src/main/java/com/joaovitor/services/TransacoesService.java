@@ -19,6 +19,11 @@ public class TransacoesService {
         this.serviceCliente = serviceCliente;
     }
 
+    public List<Transacao> getTransacoes(long idCliente){
+        List<Transacao> ultimasTransacoes = repository.findTransacoesByIdCliente(idCliente);
+        return ultimasTransacoes;
+    }
+
     public TransacaoRetorno insertTransacoes(TransacaoDTO novaTransacao, int idCliente){
 
         int novoSaldo = buscandoSaldoPeloHistoricoTransacoes((long) idCliente) + novaTransacao.valor();
@@ -29,7 +34,7 @@ public class TransacoesService {
     }
 
     public int buscandoSaldoPeloHistoricoTransacoes(long idCliente){
-        List<Transacao> transacoesDoCliente = repository.findHistoryTotalByIdCliente(idCliente);
+        List<Transacao> transacoesDoCliente = repository.findTransacoesByIdCliente(idCliente);
 
         int totalTransacoes = 0;
         for (Transacao historicoTransacoes : transacoesDoCliente){
