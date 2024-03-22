@@ -12,8 +12,18 @@ public class ClientesService {
     @Inject
     private ClienteRepository clientes;
 
+    public boolean clienteExiste(long idCliente){
+        Cliente clienteBuscado = clientes.findById(idCliente).orElse(null);
+        return clienteBuscado != null;
+    }
     public int buscaLimite(long idCliente){
         Cliente clienteBuscado = clientes.findById(idCliente).orElse(null);
         return clienteBuscado.getLimite();
+    }
+
+    public void atualizaLimite(long idCliente, int novoLimite){
+        Cliente clienteBuscado = clientes.findById(idCliente).orElse(null);
+        clienteBuscado.setLimite(novoLimite);
+        clientes.save(clienteBuscado);
     }
 }

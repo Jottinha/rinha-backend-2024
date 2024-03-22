@@ -26,11 +26,42 @@ public class TransacoesService {
 
     public TransacaoRetorno insertTransacoes(TransacaoDTO novaTransacao, int idCliente){
 
-        int novoSaldo = buscandoSaldoPeloHistoricoTransacoes((long) idCliente) + novaTransacao.valor();
-        TransacaoRetorno retorno = new TransacaoRetorno(serviceCliente.buscaLimite(idCliente), novoSaldo);
+        if (!verificaDescricao(novaTransacao.descricao()) || !verificatipo(novaTransacao.tipo())){
+            return null;
+        }
+        if (!serviceCliente.clienteExiste(idCliente)){
+            TransacaoRetorno retorno = new TransacaoRetorno();
+            retorno.setClienteValido(false);
+            return retorno;
+        }
 
-        repository.save(new Transacao(novaTransacao, idCliente));
+        TransacaoRetorno retorno = atualizaSaldoOuLimite(novaTransacao, idCliente);
+        if (retorno != null){
+            retorno.setClienteValido(true);
+            repository.save(new Transacao(novaTransacao, idCliente));
+        }
+
         return retorno;
+    }
+
+    public TransacaoRetorno atualizaSaldoOuLimite(TransacaoDTO novaTransacao, int idCliente){
+        String debito = "d";
+        if (novaTransacao.tipo().equals(debito)){
+            int novoSaldo = buscandoSaldoPeloHistoricoTransacoes((long) idCliente) + novaTransacao.valor();
+
+            if (novoSaldo < 0){
+                return null;
+            }
+            TransacaoRetorno retornoSaldoAtualizado = new TransacaoRetorno(serviceCliente.buscaLimite(idCliente), novoSaldo);
+            return retornoSaldoAtualizado;
+        }
+
+        int novoLimite = serviceCliente.buscaLimite(idCliente) + novaTransacao.valor();
+        if (novoLimite < 0){
+            return null;
+        }
+        serviceCliente.atualizaLimite(idCliente, novoLimite);
+        return new TransacaoRetorno(novoLimite, buscandoSaldoPeloHistoricoTransacoes((long) idCliente));
     }
 
     public int buscandoSaldoPeloHistoricoTransacoes(long idCliente){
@@ -38,9 +69,19 @@ public class TransacoesService {
 
         int totalTransacoes = 0;
         for (Transacao historicoTransacoes : transacoesDoCliente){
-            totalTransacoes += historicoTransacoes.getValor();
+            if (historicoTransacoes.getTipo().equals("d")){
+                totalTransacoes += historicoTransacoes.getValor();
+            }
         }
 
         return totalTransacoes;
     }
+
+    public boolean verificaDescricao(String descricao){
+        return (descricao.length() < 10) ? true : false;
+    }
+    public boolean verificatipo(String tipo){
+        return (tipo.equals("d") || tipo.equals("c")) ? true : false;
+    }
+
 }

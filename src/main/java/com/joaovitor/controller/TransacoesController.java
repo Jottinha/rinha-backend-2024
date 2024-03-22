@@ -23,8 +23,12 @@ public class TransacoesController {
     @Transactional
     public Response insertTransacoes(@PathParam("id") Integer id, TransacaoDTO transacao){
         TransacaoRetorno retorno = service.insertTransacoes(transacao, id);
+        if (retorno == null){
+            return Response.status(422).build();
+        }
+        if (retorno != null && !retorno.isClienteValido()){
+            return Response.status(404).build();
+        }
         return Response.ok(retorno).build();
     }
-
-    //TODO: Os retornos caso seja usado Debito ou Credito
 }
